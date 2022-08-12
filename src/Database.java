@@ -1,6 +1,8 @@
+import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class Database {
     public static Connection DBConnection = null;
@@ -8,6 +10,11 @@ public class Database {
         if (DBConnection == null) {
             try {
                 DBConnection = DriverManager.getConnection("jdbc:sqlite:banco.db");
+                Statement stmt = DBConnection.createStatement();
+                String SQL = "CREATE TABLE IF NOT EXISTS events (ID integer PRIMARY KEY, NAME text, DESCRIPTION text, CATEGORY text, DATE text, TIME text, PARTICIPANTS)";
+                String SQL2 = "CREATE TABLE IF NOT EXISTS users (ID integer PRIMARY KEY, USER text, PASS text, CITY text,  CEP text)";
+                stmt.execute(SQL);
+                stmt.execute(SQL2);
                 return true;
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
