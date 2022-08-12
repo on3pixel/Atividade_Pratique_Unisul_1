@@ -3,20 +3,30 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Database {
     public static Connection DBConnection = null;
     public static boolean CreateConnection () {
         if (DBConnection == null) {
+            System.out.println("------------------------");
+            System.out.println("[+] Carregando o banco de dados");
             try {
                 DBConnection = DriverManager.getConnection("jdbc:sqlite:banco.db");
+                System.out.println("[+] Banco de dados carregado com sucesso");
                 Statement stmt = DBConnection.createStatement();
-                String SQL = "CREATE TABLE IF NOT EXISTS events (ID integer PRIMARY KEY, NAME text, DESCRIPTION text, CATEGORY text, DATE text, TIME text, PARTICIPANTS)";
-                String SQL2 = "CREATE TABLE IF NOT EXISTS users (ID integer PRIMARY KEY, USER text, PASS text, CITY text,  CEP text)";
-                stmt.execute(SQL);
-                stmt.execute(SQL2);
+                String[] SQL = {
+                        "CREATE TABLE IF NOT EXISTS events (ID integer PRIMARY KEY, NAME text, DESCRIPTION text, CATEGORY text, DATE text, TIME text, PARTICIPANTS)",
+                        "CREATE TABLE IF NOT EXISTS users (ID integer PRIMARY KEY, USER text, PASS text, CITY text,  CEP text, IDADE int)"
+                };
+                for (String s : SQL) {
+                    stmt.execute(s);
+                }
                 return true;
             } catch (SQLException e) {
+                System.out.println("[+] Falha no banco de dados");
+                System.exit(157);
                 System.out.println(e.getMessage());
                 return false;
             }
