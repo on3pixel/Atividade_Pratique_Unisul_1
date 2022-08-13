@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.plaf.nimbus.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,8 +12,6 @@ public class Database {
     public static Connection DBConnection = null;
     public static boolean CreateConnection () {
         if (DBConnection == null) {
-            System.out.println("------------------------");
-            System.out.println("[+] Carregando o banco de dados");
             try {
                 DBConnection = DriverManager.getConnection("jdbc:sqlite:banco.db");
                 System.out.println("[+] Banco de dados carregado com sucesso");
@@ -26,8 +26,8 @@ public class Database {
                 return true;
             } catch (SQLException e) {
                 System.out.println("[+] Falha no banco de dados");
-                System.exit(157);
                 System.out.println(e.getMessage());
+                System.exit(157);
                 return false;
             }
         }

@@ -1,42 +1,25 @@
-import java.io.*;
+package panels;
+
+import main.Database;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.text.*;
-import java.util.*;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Main {
-    public static String Menu = "LoginPanel";
-    public static void main(String[] args) {
-        Database.CreateConnection();
-        LoginPanel();
-    }
-    public static void LoginPanel() {
-        while (Objects.equals(Menu, "LoginPanel")) {
-            Scanner ReadInput = new Scanner(System.in);
-            System.out.flush();
-            System.out.println("------------------------");
-            System.out.println("[+] Escolha entre as opções a baixo:");
-            System.out.println("[+] 1 - Logar");
-            System.out.println("[+] 2 - Registrar-se");
-            System.out.println("------------------------");
-            System.out.print("[+] Escolha 1 ou 2: ");
-            String input = ReadInput.nextLine();
-            switch (input) {
-                case "1" -> {
-                    System.out.println("1!");
-                    Menu = "Logar";
-                }
-                case "2" -> {
-                    System.out.println("------------------------");
-                    Menu = "Registrar";
-                    RegisterUser();
-                }
-                default -> System.out.println("[!] Escolha 1 ou 2 :)");
-            }
-        }
-    }
+import static main.Database.DBConnection;
+
+import static main.Main.Menu;
+import static panels.Login.LoginPanel;
+
+public class Register {
     public static void RegisterUser() {
         String User = null;
         String Idade = null;
@@ -189,9 +172,25 @@ public class Main {
                         case "sim", "s", "si" -> {
                             CEP = input;
                             City = cidade;
-                            System.out.println("[+] Prosseguindo :)");
-                            System.out.println("------------------------");
-                            break loop_cep;
+                            Menu = "LoginPanel";
+                            String RegisterSQL = "INSERT INTO users (USER, PASS, CITY, CEP, IDADE) VALUES (?,?,?,?,?)";
+                            try {
+                                main.Database.CreateConnection();
+                                PreparedStatement stmt = DBConnection.prepareStatement(RegisterSQL);
+                                stmt.setString(1, User);
+                                stmt.setString(2, Senha);
+                                stmt.setString(3, City);
+                                stmt.setString(4, CEP);
+                                stmt.setInt(5, Integer.parseInt(Idade));
+                                stmt.executeUpdate();
+                            } catch (Exception e) {
+                                System.out.println("[!] Erro na criação do usuário");
+                            } finally {
+                                System.out.println("[+] Seu cadastro foi finalizado! :)");
+                                System.out.println("------------------------");
+                                LoginPanel();
+                                break loop_cep;
+                            }
                         }
                         case "nao", "n", "no" -> {
                             System.out.println("------------------------");
@@ -213,5 +212,3 @@ public class Main {
         }
     }
 }
-
-
