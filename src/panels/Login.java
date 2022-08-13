@@ -1,5 +1,7 @@
 package panels;
 
+import main.Database;
+
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -20,8 +22,9 @@ public class Login {
                 String input = ReadInput.nextLine();
                 switch (input) {
                     case "1" -> {
-                        System.out.println("1!");
+                        System.out.println("------------------------");
                         Menu = "Logar";
+                        LoginUser();
                     }
                     case "2" -> {
                         System.out.println("------------------------");
@@ -32,4 +35,36 @@ public class Login {
                 }
             }
         }
+        public static void LoginUser() {
+            String Usuario = null;
+            String Senha = null;
+            while (Objects.equals(Menu, "Logar")) {
+                while (Usuario == null) {
+                    System.out.print("[+] Digite seu usuário: ");
+                    Scanner input = new Scanner(System.in);
+                    Usuario = input.nextLine();
+                    break;
+                }
+                while (Senha == null) {
+                    System.out.print("[+] Digite sua senha: ");
+                    Scanner input = new Scanner(System.in);
+                    Senha = input.nextLine();
+                    break;
+                }
+                if (Usuario != null && Senha != null) {
+                    boolean result = Database.CheckPass(Usuario, Senha);
+                    if (result) {
+                        System.out.println("[+] Login efetuado com sucesso");
+                        System.out.println("[+] Redirecionando ao menu principal..");
+                        break;
+                    } else {
+                        System.out.println("[!] Usuário ou senha inválido.");
+                        Usuario = null;
+                        Senha = null;
+                    }
+
+                }
+            }
+        }
 }
+

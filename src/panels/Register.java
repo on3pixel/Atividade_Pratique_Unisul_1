@@ -9,6 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
 import java.util.Scanner;
@@ -173,9 +174,8 @@ public class Register {
                             CEP = input;
                             City = cidade;
                             Menu = "LoginPanel";
-                            String RegisterSQL = "INSERT INTO users (USER, PASS, CITY, CEP, IDADE) VALUES (?,?,?,?,?)";
+                            String RegisterSQL = "INSERT INTO users (USER, PASS, CITY, CEP, IDADE) VALUES (?,?,?,?,?);";
                             try {
-                                main.Database.CreateConnection();
                                 PreparedStatement stmt = DBConnection.prepareStatement(RegisterSQL);
                                 stmt.setString(1, User);
                                 stmt.setString(2, Senha);
@@ -183,7 +183,8 @@ public class Register {
                                 stmt.setString(4, CEP);
                                 stmt.setInt(5, Integer.parseInt(Idade));
                                 stmt.executeUpdate();
-                            } catch (Exception e) {
+                            } catch (SQLException e) {
+                                System.out.println(e.getMessage());
                                 System.out.println("[!] Erro na criação do usuário");
                             } finally {
                                 System.out.println("[+] Seu cadastro foi finalizado! :)");

@@ -1,15 +1,14 @@
 package main;
 
 import javax.swing.plaf.nimbus.State;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
     public static Connection DBConnection = null;
+    public static boolean ValidPass;
+    public static String result;
     public static boolean CreateConnection () {
         if (DBConnection == null) {
             try {
@@ -32,6 +31,20 @@ public class Database {
             }
         }
         return true;
+    }
+    public static boolean CheckPass(String user, String pass) {
+        String CheckPassSQL = "SELECT * FROM users WHERE USER = ? AND PASS = ?";
+        try {
+            PreparedStatement stmt = DBConnection.prepareStatement(CheckPassSQL);
+            stmt.setString(1, user);
+            stmt.setString(2,pass);
+            ResultSet rst = stmt.executeQuery();
+            if (rst.getString(1) == null) { return false; }
+            return true;
+        } catch (SQLException e) {
+            System.out.println("[!] Falha no login");
+        }
+        return false;
     }
     public static boolean DestroyConnection () {
         if (DBConnection != null) {
