@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import static main.Main.Menu;
+import static main.Main.LoggedUser;
 import static panels.Register.RegisterUser;
 
 public class Login {
@@ -56,13 +57,14 @@ public class Login {
                     if (result) {
                         System.out.println("[+] Login efetuado com sucesso");
                         System.out.println("[+] Redirecionando ao menu principal..");
+                        LoggedUser = Usuario;
                         break;
                     } else {
                         System.out.println("[!] Usuário ou senha inválido.");
                         Usuario = null;
                         Senha = null;
+                        System.out.println("------------------------");
                     }
-
                 }
             }
         }

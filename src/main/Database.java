@@ -1,6 +1,8 @@
 package main;
 
 import javax.swing.plaf.nimbus.State;
+import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ public class Database {
     public static Connection DBConnection = null;
     public static boolean ValidPass;
     public static String result;
-    public static boolean CreateConnection () {
+    public static void CreateConnection () {
         if (DBConnection == null) {
             try {
                 DBConnection = DriverManager.getConnection("jdbc:sqlite:banco.db");
@@ -22,15 +24,23 @@ public class Database {
                 for (String s : SQL) {
                     stmt.execute(s);
                 }
-                return true;
             } catch (SQLException e) {
                 System.out.println("[+] Falha no banco de dados");
                 System.out.println(e.getMessage());
                 System.exit(157);
-                return false;
             }
         }
-        return true;
+        try {
+            File myObj = new File("events.data");
+            if (myObj.createNewFile()) {
+                System.out.println("File created: " + myObj.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
     public static boolean CheckPass(String user, String pass) {
         String CheckPassSQL = "SELECT * FROM users WHERE USER = ? AND PASS = ?";
@@ -57,40 +67,5 @@ public class Database {
             }
         }
         return true;
-    }
-
-    public static void CreateEvent() {
-        /*
-        Categoria de eventos disponíveis:
-        Festas, Evento Esportivo, Shows.
-
-        Eventos devem possuír: Nome do evento, Endereço, Categoria, Data, Horário e descrição
-         */
-
-    }
-
-    public static void FetchEvent() {
-
-    }
-
-    public static void DeleteEvent() {
-
-    }
-
-    public static void ParticipateEvent() {
-
-    }
-
-    public static void CreateUser() {
-
-    }
-
-    public static void Login(String user, String pass) {
-        try {
-            boolean connected = CreateConnection();
-            if (connected) {
-
-            }
-        } catch (Exception e) { System.out.println(e.getMessage()); }
     }
 }

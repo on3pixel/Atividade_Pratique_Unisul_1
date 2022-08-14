@@ -154,7 +154,7 @@ public class Register {
 
                     json = json.replaceAll("[{},:]", "");
                     json = json.replaceAll("\"", "\n");
-                    String[] array = new String[30];
+                    String[] array;
                     array = json.split("\n");
 
                     logradouro = array[7];
